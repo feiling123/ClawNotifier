@@ -152,7 +152,7 @@ export class IlinkClient {
   }
 
   public async sendMessage(bot: BotState, text: string): Promise<void> {
-    const response = await this.request<SendMessageResponse>("POST", "/ilink/bot/sendMessage", {
+    const response = await this.request<SendMessageResponse>("POST", "/ilink/bot/sendmessage", {
       token: bot.botToken,
       body: {
         msg: {
@@ -172,12 +172,12 @@ export class IlinkClient {
           ]
         },
         base_info: {
-          channel_version: "1.0.2"
+          channel_version: "1.0.3"
         }
       }
     });
 
-    this.assertIlinkBody(response, 200, `${this.baseUrl}/ilink/bot/sendMessage`);
+    this.assertIlinkBody(response, 200, `${this.baseUrl}/ilink/bot/sendmessage`);
   }
 
   public async sendTyping(bot: BotState, status: 1 | 2): Promise<void> {

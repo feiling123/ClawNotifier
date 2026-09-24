@@ -4,7 +4,7 @@
 
 它把外部系统的文本通知桥接到微信 `ClawBot`，并补齐了 iLink 协议在云端部署时常见的几个缺口：扫码登录、`context_token` 激活、投递记录、失败重试，以及一个可直接在浏览器里操作的轻量管理页面。
 
-[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/feiling123/ClawNotifier)
+[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/krapnikkk/Cloudflare-WeChat-Notifier)
 
 ```mermaid
 flowchart LR

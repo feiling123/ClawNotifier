@@ -52,7 +52,8 @@ export const renderSendTestPage = (input: { adminPath: string }): string => {
           const payload = await response.json();
           if (!response.ok) throw new Error(payload.message || "未知错误");
           sendMessage.className = "message-box " + (payload.data.status === "failed" ? "error" : "success");
-          sendMessage.textContent = "deliveryId=" + payload.data.deliveryId + "，状态=" + payload.data.status;
+          sendMessage.textContent = "deliveryId=" + payload.data.deliveryId + "，状态=" + payload.data.status
+            + (payload.data.error ? "，原因=" + payload.data.error : "");
           sendText.value = "";
         } catch (error) {
           sendMessage.className = "message-box error";

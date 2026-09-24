@@ -79,6 +79,8 @@ export interface SendDeliveryResult {
   deliveryId: string;
   duplicate: boolean;
   status: DeliveryStatus;
+  error?: string | null;
+  responseCode?: number | null;
 }
 
 export interface DeliveryListQuery {

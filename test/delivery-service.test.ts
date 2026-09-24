@@ -121,13 +121,31 @@ describe("sendDelivery", () => {
     const client = createClient(vi.fn().mockResolvedValue(undefined));
     const service = new DefaultDeliveryService(repository, botRepository, client);
 
-    await expect(service.sendDelivery("github", { text: "build completed" })).resolves.toEqual({
+    await expect(service.sendDelivery("github", { text: "build completed" })).resolves.toMatchObject({
       deliveryId: "delivery-1",
       duplicate: false,
       status: "delivered"
     });
     expect(client.sendMessage).toHaveBeenCalledTimes(1);
     expect(repository.markDelivered).toHaveBeenCalledWith("delivery-1", 1, 200);
+  });
+
+  it("splits multi-line text into multiple messages", async () => {
+    const delivery = createDelivery({ status: "queued", text: "line1\nline2\n\nline3" });
+    const repository = createRepository({
+      createQueued: vi.fn().mockResolvedValue({ delivery, duplicate: false })
+    });
+    const botRepository = createBotRepository(createBot());
+    const client = createClient(vi.fn().mockResolvedValue(undefined));
+    const service = new DefaultDeliveryService(repository, botRepository, client);
+
+    await expect(service.sendDelivery("github", { text: "line1\nline2\n\nline3" })).resolves.toMatchObject({
+      status: "delivered"
+    });
+    expect(client.sendMessage).toHaveBeenCalledTimes(3);
+    expect(client.sendMessage).toHaveBeenNthCalledWith(1, expect.anything(), "line1");
+    expect(client.sendMessage).toHaveBeenNthCalledWith(2, expect.anything(), "line2");
+    expect(client.sendMessage).toHaveBeenNthCalledWith(3, expect.anything(), "line3");
   });
 
   it("fails when no bot is logged in", async () => {

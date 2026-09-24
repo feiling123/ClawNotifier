@@ -60,7 +60,9 @@ export class DefaultDeliveryService {
       return {
         deliveryId: created.delivery.deliveryId,
         duplicate: true,
-        status: created.delivery.status
+        status: created.delivery.status,
+        error: created.delivery.error,
+        responseCode: created.delivery.responseCode
       };
     }
 
@@ -69,7 +71,9 @@ export class DefaultDeliveryService {
     return {
       deliveryId: created.delivery.deliveryId,
       duplicate: false,
-      status: result.status
+      status: result.status,
+      error: result.error,
+      responseCode: result.responseCode
     };
   }
 
@@ -281,9 +285,22 @@ export class DefaultDeliveryService {
     let lastError: string | null = null;
     let lastResponseCode: number | null = null;
 
+    // ClawBot 会把文本中的换行折叠成空格，因此将多行文本拆分为多条消息发送，
+    // 这样微信里就能分行显示。空行会被忽略。
+    const lines = delivery.text
+      .replace(/\r\n/g, "\n")
+      .replace(/\r/g, "\n")
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line.length > 0);
+    const messages = lines.length > 0 ? lines : [delivery.text];
+
     for (let attempt = 1; attempt <= MAX_SEND_ATTEMPTS; attempt += 1) {
       try {
-        await this.ilinkClient.sendMessage(bot, delivery.text);
+        for (const message of messages) {
+          await this.ilinkClient.sendMessage(bot, message);
+        }
+
         await this.botRepository.setLastError(null);
         await this.deliveryLogRepository.markDelivered(delivery.deliveryId, attempt, 200);
         return {

@@ -44,7 +44,7 @@ describe("IlinkClient", () => {
     });
   });
 
-  it("should use the current camelCase sendMessage endpoint", async () => {
+  it("should use the lowercase sendmessage endpoint", async () => {
     const fetchImpl = vi.fn().mockResolvedValue(
       new Response(
         JSON.stringify({
@@ -79,6 +79,6 @@ describe("IlinkClient", () => {
     await client.sendMessage(bot, "hello");
 
     expect(fetchImpl).toHaveBeenCalledTimes(1);
-    expect(String(fetchImpl.mock.calls[0]?.[0])).toBe("https://ilinkai.weixin.qq.com/ilink/bot/sendMessage");
+    expect(String(fetchImpl.mock.calls[0]?.[0])).toBe("https://ilinkai.weixin.qq.com/ilink/bot/sendmessage");
   });
 });
