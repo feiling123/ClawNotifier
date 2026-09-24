@@ -1,0 +1,23 @@
+name = "claw-notifier"
+main = "src/index.ts"
+compatibility_date = "2026-03-26"
+
+[vars]
+ADMIN_PATH = "REPLACE_ME"
+ADMIN_USERNAME = "whoami"
+ADMIN_TOKEN = "REPLACE_ME"
+WEBHOOK_SHARED_TOKEN = "REPLACE_ME"
+BOT_STATE_ENC_KEY = "REPLACE_ME"
+ILINK_BASE_URL = "https://ilinkai.weixin.qq.com"
+KEEPALIVE_ENABLED = "true"
+KEEPALIVE_INTERVAL_HOURS = "24"
+KEEPALIVE_TEXT = "【保活提醒】请和微信 ClawBot 进行一次交互，保持 iLink 上下文可用。"
+
+[triggers]
+crons = ["0 * * * *"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "claw-notifier"
+database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "migrations"
